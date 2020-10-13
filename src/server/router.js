@@ -17,7 +17,7 @@ async function newUser (request, response) {
     if (userCheck) {
       // if username exists in database, alert user already exists
       console.log('user already exists: ', request.body.username);
-      response.body.message = 'used name';
+      // response.body.message = 'used name';
       response.status(200).send('used name');
     }
     if (request.body.password) {
