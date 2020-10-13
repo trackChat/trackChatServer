@@ -11,12 +11,12 @@ const auth = require('../middleware/auth');
 router.post('/signup', newUser);
 router.post('/signin', auth, getUser);
 
-async function newUser (request, response, next) {
+async function newUser (request, response) {
   try {
     if (checkForUser(request.body.username)) {
       // if username exists in database, alert user already exists
       console.log('user already exists: ', request.body.username);
-      next('User is already signed up');
+      response.status(200).send('used name');
     }
     if (request.body.password) {
       let hashedPassword = await bcrypt.hash(request.body.password, 5);
