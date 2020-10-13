@@ -15,15 +15,31 @@ async function newUser (request, response) {
   try {
     let userCheck = await checkForUser(request.body.username);
     if (userCheck) {
-      // if username exists in database, alert user already exists
       console.log('user already exists: ', request.body.username);
-      // response.body.message = 'used name';
       response.status(200).send('used name');
     }
+    
+    let emailCheck = null;
+    if(request.body.email) {
+      emailCheck = await checkForEmail(request.body.email);  
+    }
+    
+    if (emailCheck) {
+      console.log('email already exists: ', request.body.email);
+      response.status(200).send('used email');
+    }
+
+    let phoneCheck = await checkForPhone(request.body.phoneNumber);
+    if (phoneCheck) {
+      console.log('phone number already exists: ', request.body.phoneNumber);
+      response.status(200).send('used phone number');
+    }
+
     if (request.body.password) {
       let hashedPassword = await bcrypt.hash(request.body.password, 5);
       request.body.password = hashedPassword;
     }
+
     await UserSchema.create(request.body);
     response.status(200).send('success');
   } catch (error) {
@@ -39,9 +55,27 @@ async function checkForUser(username) {
   return false;
 }
 
+async function checkForEmail(email) {
+  let foundEmail = await UserSchema.findOne({ email });
+  if (foundEmail) {
+    return true;
+  }
+  return false;
+}
+
+async function checkForPhone(phone) {
+  let foundPhone = await UserSchema.findOne({ phone });
+  if (foundPhone) {
+    return true;
+  }
+  return false;
+}
+
+
 async function getUser(request, response) {
   response.status(200).send({user: request.user});
 }
+
 
 
 
