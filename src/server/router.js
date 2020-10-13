@@ -11,19 +11,21 @@ const auth = require('../middleware/auth');
 router.post('/signup', newUser);
 router.post('/signin', auth, getUser);
 
-async function newUser (request, response) {
+async function newUser (request, response, next) {
   try {
     if (checkForUser(request.body.username)) {
       // if username exists in database, alert user already exists
       console.log('user already exists: ', request.body.username);
+      next('User is already signed up');
     }
     if (request.body.password) {
-      request.body.password = await bcrypt.hash(request.body.password, 5);
+      let hashedPassword = await bcrypt.hash(request.body.password, 5);
+      request.body.password = hashedPassword;
     }
     await UserSchema.create(request.body);
     response.status(200).send('success');
   } catch (error) {
-    console.error('error trying to save', error);
+    console.error('Error trying to save:', error);
   }
 }
 
