@@ -63,8 +63,8 @@ async function checkForEmail(email) {
   return false;
 }
 
-async function checkForPhone(phone) {
-  let foundPhone = await UserSchema.findOne({ phone });
+async function checkForPhone(phoneNumber) {
+  let foundPhone = await UserSchema.findOne({ phoneNumber });
   if (foundPhone) {
     return true;
   }
