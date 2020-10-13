@@ -13,6 +13,10 @@ router.post('/signin', auth, getUser);
 
 async function newUser (request, response) {
   try {
+    if (checkForUser(request.body.username)) {
+      // if username exists in database, alert user already exists
+      console.log('user already exists: ', request.body.username);
+    }
     if (request.body.password) {
       request.body.password = await bcrypt.hash(request.body.password, 5);
     }
@@ -21,6 +25,14 @@ async function newUser (request, response) {
   } catch (error) {
     console.error('error trying to save', error);
   }
+}
+
+async function checkForUser(username) {
+  let foundUser = await UserSchema.findOne({ username });
+  if (foundUser) {
+    return true;
+  }
+  return false;
 }
 
 async function getUser(request, response) {
