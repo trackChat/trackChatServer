@@ -1,4 +1,4 @@
-'use strict';
+
 
 const server = require('./src/server/server.js');
 require('express');
@@ -17,33 +17,33 @@ const mongooseOptions = {
 };
 
 const socketServer = server.app
-.use((request, response) => response.sendFile(INDEX, { root: __dirname} ))
-.listen(process.env.PORT, () => console.log(`listening on ${process.env.PORT}`))
+  .use((request, response) => response.sendFile(INDEX, { root: __dirname }))
+  .listen(process.env.PORT, () => console.log(`listening on ${process.env.PORT}`));
 
 mongoose.connect(MONGODB_URI, mongooseOptions);
 
 const io = socketIO(socketServer);
 
-const socketTable = {}
+const socketTable = {};
 
 io.on('connection', (socket) => {
   socket.on('join', userObj => {
-    console.log('from the index', socket.id)
+    console.log('from the index', socket.id);
     socketTable[socket.id] = userObj.username;
     console.log(socketTable);
-  })
-  
+  });
+
   io.emit('test', 'payload');
 
 
   socket.on('locationBroadcast', latLonName => {
     console.log(latLonName);
-    io.emit('location', latLonName)
-  })
+    io.emit('location', latLonName);
+  });
 
   socket.on('disconnect', () => {
     delete socketTable[socket.id];
     console.log(socketTable);
-  })
+  });
 
-})
+});
