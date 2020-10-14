@@ -46,6 +46,10 @@ io.on('connection', (socket) => {
     io.emit('chat', chat);
   });
 
+  socket.on('sosBroadcast', alert => {
+    io.emit('sos', alert);
+  });
+
   socket.on('disconnect', () => {
     delete socketTable[socket.id];
     console.log(socketTable);
