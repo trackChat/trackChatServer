@@ -41,6 +41,11 @@ io.on('connection', (socket) => {
     io.emit('location', latLonName);
   });
 
+  socket.on('chatBroadcast', chat => {
+    console.log('chat from the index', chat);
+    io.emit('chat', chat);
+  });
+
   socket.on('disconnect', () => {
     delete socketTable[socket.id];
     console.log(socketTable);
