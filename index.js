@@ -42,7 +42,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
+    // const user = socketTable[socket.id];
     delete socketTable[socket.id];
+    // io.emit('userLeaves', user);
     console.log(socketTable);
   });
 
