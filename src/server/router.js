@@ -10,6 +10,21 @@ const auth = require('../middleware/auth');
 
 router.post('/signup', newUser);
 router.post('/signin', auth, getUser);
+router.get('/getusers', getAllUsers);
+
+
+async function getAllUsers (request, response) {
+  try {
+    let users = await UserSchema.find({});
+    let usernames = users.map(user => {
+      return user.username;
+    });
+    console.log(usernames);
+    response.status(200).send(usernames);
+  } catch (error) {
+    console.error('Error trying to get users:', error);
+  }
+}
 
 async function newUser (request, response) {
   try {
