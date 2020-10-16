@@ -1,13 +1,12 @@
-
+'use strict';
 
 const server = require('./src/server/server.js');
-require('express');
 const mongoose = require('mongoose');
-require('dotenv').config();
 const socketIO = require('socket.io');
+require('express');
+require('dotenv').config();
 
 const INDEX = '/index.html';
-
 const MONGODB_URI = process.env.MONGODB_URI;
 
 const mongooseOptions = {
@@ -28,21 +27,17 @@ const socketTable = {};
 
 io.on('connection', (socket) => {
   socket.on('join', userObj => {
-    console.log('from the index', socket.id);
     socketTable[socket.id] = userObj.username;
-    console.log(socketTable);
   });
 
   io.emit('test', 'payload');
 
 
   socket.on('locationBroadcast', latLonName => {
-    console.log(latLonName);
     io.emit('location', latLonName);
   });
 
   socket.on('chatBroadcast', chat => {
-    console.log('chat from the index', chat);
     io.emit('chat', chat);
   });
 
@@ -51,10 +46,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    // const user = socketTable[socket.id];
     delete socketTable[socket.id];
-    // io.emit('userLeaves', user);
-    console.log(socketTable);
   });
 
 });

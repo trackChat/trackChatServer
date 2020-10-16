@@ -1,15 +1,36 @@
-
+'use strict';
 
 const express = require('express');
 const bcrypt = require('bcrypt');
-
 const router = express.Router();
 const UserSchema = require('../../lib/database/schema/user-schema');
 const auth = require('../middleware/auth');
 
-
 router.post('/signup', newUser);
 router.post('/signin', auth, getUser);
+router.get('/getusers', getAllUsers);
+
+///////////////////////////////////////////////////////////
+// This returns a list of all of the users in the database
+// in an array. 
+///////////////////////////////////////////////////////////
+
+async function getAllUsers (request, response) {
+  try {
+    let users = await UserSchema.find({});
+    let usernames = users.map(user => {
+      return user.username;
+    });
+    console.log(usernames);
+    response.status(200).send(usernames);
+  } catch (error) {
+    console.error('Error trying to get users:', error);
+  }
+}
+
+///////////////////////////////////////////////////////////
+// This saves new users into the database
+///////////////////////////////////////////////////////////
 
 async function newUser (request, response) {
   try {
@@ -47,6 +68,11 @@ async function newUser (request, response) {
   }
 }
 
+///////////////////////////////////////////////////////////
+// This checks to see if a username, emails, and phone number
+//exists within the  database
+///////////////////////////////////////////////////////////
+
 async function checkForUser(username) {
   let foundUser = await UserSchema.findOne({ username });
   if (foundUser) {
@@ -71,13 +97,14 @@ async function checkForPhone(phoneNumber) {
   return false;
 }
 
+///////////////////////////////////////////////////////////
+// This grabs one user from the database and grants access
+// to the app
+///////////////////////////////////////////////////////////
 
 async function getUser(request, response) {
   response.status(200).send({user: request.user});
 }
-
-
-
 
 module.exports = router;
 

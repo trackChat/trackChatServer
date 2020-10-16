@@ -1,4 +1,4 @@
-
+'use strict';
 
 require('dotenv').config();
 
@@ -7,7 +7,6 @@ const app = express();
 const notFoundHandler = require('../middleware/404.js');
 const errorHandler = require('../middleware/500.js');
 const router = require('./router');
-
 
 
 app.use(express.json());
