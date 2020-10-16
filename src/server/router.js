@@ -10,10 +10,13 @@ router.post('/signup', newUser);
 router.post('/signin', auth, getUser);
 router.get('/getusers', getAllUsers);
 
+<<<<<<< HEAD
 ///////////////////////////////////////////////////////////
 // This returns a list of all of the users in the database
 // in an array. 
 ///////////////////////////////////////////////////////////
+=======
+>>>>>>> 4511677f1946bac8a5fbbd6dff0a2cee2ed321de
 
 async function getAllUsers (request, response) {
   try {
@@ -27,10 +30,13 @@ async function getAllUsers (request, response) {
     console.error('Error trying to get users:', error);
   }
 }
+<<<<<<< HEAD
 
 ///////////////////////////////////////////////////////////
 // This saves new users into the database
 ///////////////////////////////////////////////////////////
+=======
+>>>>>>> 4511677f1946bac8a5fbbd6dff0a2cee2ed321de
 
 async function newUser (request, response) {
   try {
